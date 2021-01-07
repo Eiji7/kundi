@@ -1,0 +1,27 @@
+<div class="grid">
+  <%= for {row, row_index} <- Enum.with_index(@game.grid, 1) do %>
+    <%= for {cell, column_index} <- Enum.with_index(row, 1) do %>
+      <% point = {column_index, row_index} %>
+      <% opponents = @opponents[point] || [] %>
+      <% class = cond do
+        cell == 1 -> "wall"
+        @hero.point == point and @hero.alive == false -> "dead"
+        @hero.point == point and @hero.alive == true -> "alive"
+        Enum.any?(opponents, &not &1.alive) -> "dead"
+        true -> "space"
+      end %>
+      <div class='cell <%= class %>'>
+        <%= if @hero.point == point do %>
+          <div>
+            <%= @hero.name %>
+          </div>
+        <% end %>
+        <%= for opponent <- opponents do %>
+          <div>
+            <%= opponent.name %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

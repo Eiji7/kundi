@@ -1,0 +1,7 @@
+<form action="/play">
+  <label for="game">Game</label>
+  <input id="game" name="game" pattern="[a-z0-9-]+" required type="text" value='<%= "game-#{System.unique_integer([:positive])}" %>'/>
+  <label for="hero">Hero</label>
+  <input id="hero" name="hero" pattern="[a-z0-9-]+" required type="text" value='<%= "hero-#{System.unique_integer([:positive])}" %>'>
+  <input type="submit" value="Submit">
+</form>

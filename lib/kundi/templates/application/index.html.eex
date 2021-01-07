@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+    <meta charset="utf-8"/>
+    <script>
+      'use strict';
+      let url = new URL(window.location);
+      url.searchParams.delete('event');
+      url.searchParams.delete('direction');
+      if (url.pathname === '/play' ) {
+        setTimeout(() => window.location = url.href, 1000);
+        document.addEventListener('keyup', (event) => {
+          switch (event.key) {
+            case 'ArrowDown':
+            case 'ArrowLeft':
+            case 'ArrowRight':
+            case 'ArrowUp':
+              url.searchParams.set('event', 'move');
+              url.searchParams.set('direction', event.key.slice(5).toLowerCase());
+              window.location = url.href;
+              break;
+            case 'a':
+              url.searchParams.set('event', 'attack');
+              window.location = url.href;
+              break;
+          }
+        }, false);
+      }
+    </script>
+    <style>
+      html, body, main, .grid {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        background-color: #4d4d4d;
+        color: #f2f2f2;
+        padding: 1em;
+      }
+      header > h1 {
+        margin: 0;
+        text-align: center;
+      }
+      main {
+        background-color: #666;
+      }
+      form {
+        display: grid;
+        grid-row-gap: 1em;
+        grid-template-columns: 1fr 9fr;
+        grid-template-rows: repeat(3, 1fr);
+        margin: 0 auto;
+        padding: 1em 0;
+        width: 75%;
+      }
+      form > input[type=submit] {
+        grid-column: span 2;
+      }
+      form > label {
+        background-color: #808080;
+        border: 1px solid #808080;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 1em;
+        text-align: right;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(25, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+      }
+      .grid > .cell {
+        align-items: center;
+        border: 1px solid black;
+        color: #e6e6e6;
+        display: flex;
+        flex-direction: column;
+        font-weight: bold;
+        justify-content: center;
+        padding: 5px;
+      }
+      .grid > .cell.alive {
+        background-color: green;
+      }
+      .grid > .cell.dead {
+        background-color: #800000;
+      }
+      .grid > .cell.space {
+        background-color: #808080;
+      }
+      .grid > .cell.wall {
+        background-color: #666;
+      }
+      footer {
+        background-color: #999;
+        color: #d9d9d9;
+        padding: 0.5em;
+        text-align: center;
+      }
+      kbd {
+        background: #eee;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px #777;
+        color: #555;
+        display: inline-block;
+        font-family: Consolas, "Lucida Console", monospace;
+        font-size: small;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin: 2px 3px 2px 2px;
+        padding: 0px 4px;
+        vertical-align: text-bottom;
+      }
+    </style>
+    <title>Kundi <%= if @game, do: " | " <> @game.name <> "@" <> @hero.name %></title>
+  </head>
+  <body>
+    <header>
+      <h1>Kundi <%= if @game, do: " | " <> @game.name <> "@" <> @hero.name %></h1>
+    </header>
+    <main>
+      <%= @inner_content %>
+    </main>
+    <footer>
+      <b>Controls</b>: move using arrows (<kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd>) and attack using <kbd>A</kbd>
+      <br/>
+      <b>Note</b>: Same hero in same game may be controlled by multiple connected users.
+    </footer>
+  </body>
+</html>
